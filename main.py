@@ -1,10 +1,10 @@
 import os
 import pandas as pd
-import pathlib
 import nltk
 from datetime import datetime
 from nltk.tokenize import word_tokenize
 from tkinter import *
+import pdftotext
 files = []
 filename=[]
 word=[]
@@ -14,7 +14,41 @@ temp=[]
 ovrvw=[]
 ovrview=[]
 dt=[]
-pattern="hu"
+pattern=[]
+delta=[]
+rep=1
+for i in range(13):
+    year=2000
+    for j in range(22):
+        if(i<10):
+
+            pattern.append("/"+"0"+str(i)+"/"+str(year))
+        else:
+            pattern.append("/"+"0"+str(i)+"/"+str(year))
+        year=2000
+        year+=j
+k=False
+
+
+
+
+
+
+def pdftotexts(filename):
+ 
+    # Load your PDF
+    with open(filename, "rb") as f:
+        pdf = pdftotext.PDF(f)
+        f.close()
+        
+    
+    # Save all text to a txt file.
+    with open(str(filename)[:-4]+"_text.txt", 'w') as f:
+        f.write("\n\n".join(pdf))
+        f.close()
+
+
+
 
 def getAllindex(list, num):
     return filter(lambda a: list[a]==num, range(0,len(list)))
@@ -25,7 +59,7 @@ def killroot():
 	root.destroy()
 
 def savesearch():
-    global searchh_entry,search,searches
+    global searchh_entry,search,searches,temp
     search=str(searchh_entry.get())
     if(" " in search):
         for i in range(len(search.split(" "))):
@@ -35,6 +69,7 @@ def savesearch():
                 searches.append(j)
     else:
         searches=list(all_casings(search))
+    temp=[]
     killroot()
 def savefilepath():
     global directory_entry,path
@@ -66,7 +101,7 @@ def all_casings(input_string):
 
 
 
-print("\n\nMake Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas\n\n")
+print("\n\nMake Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdftotext\n\n")
 
 
 
@@ -78,7 +113,7 @@ try:
     n.close()
     killroot()
 except:
-	#nltk.download('punkt')
+	#If nltk punkt is not downloaded then in cmd or terminal type nltk.download('punkt')
 	label_for_directory=Label(text="Enter your folder Directory [One Time Only] (Example : C:\\Users\\User\\Desktop' ) : ")
 	label_for_directory.pack()
 	directory_entry=Entry(root)
@@ -88,10 +123,7 @@ except:
     
     
     
-    # path=input("Enter your folder Directory [One Time Only] (Example : C:\\Users\\User\\Desktop' ) : ")
-    # n=open("file_path_config_file.txt","w")
-    # n.write(path)
-    # n.close()
+    
     
 
 root.mainloop()
@@ -115,8 +147,23 @@ root.mainloop()
 # r=root, d=directories, f = files
 for r, d, f in os.walk(path):
     for file in f:
+        if '.pdf' in file:
+            files.append(os.path.join(r, file))
+
+
+
+for ff in files:
+    pdftotexts(ff)
+
+files=[]
+
+# r=root, d=directories, f = files
+for r, d, f in os.walk(path):
+    for file in f:
         if '.txt' in file:
             files.append(os.path.join(r, file))
+
+
 for ff in files:
     a=open(ff)
     a_=str(a.read())
@@ -128,44 +175,112 @@ for ff in files:
             frequency.append(freq)
             filename.append(ff)
             word.append(f)
+
+            
+            
+            for i in (list(getAllindex(tokens,f))):
+
+                if(i>=1 and len(tokens)>1):
+                    ovrvw.append(tokens[i-1:i+3])
+                elif(i>=2):
+                    ovrvw.append(tokens[i-3:i+3])
+                elif(i>=3):
+                    ovrvw.append(tokens[i-3:i+3])
+                
+                else:
+                    ovrvw.append(tokens[i:i+3])
+
+
+            temps=ovrvw
+
+            ovrvw=[]
+            ovrview.append((str(temps)))
+
+            for i in pattern:
+                if(i in a_):
+                    rep+=1
+                if(i in a_ and rep<=2):
+                    dt.append(str(i[1:]))
+                    delta.append(int(str(datetime.today())[:-22])-(int(str(i)[-4:])))
+                    k=True
+                if(rep>2):
+                    dt.pop(-1)
+                    delta.pop(-1)
+                    dt.append("Multiple Dates Detected")
+                    delta.append("Cannot be Determined")
+                    k=True
+                    break
+            rep=1
+
+             
+
+            if(k):
+                k=False
+            else:
+                dt.append("Not Found")
+                delta.append("Cannot be Determined")
+                k=False
+
+            
         
 
         elif(str(f) in searches):
             frequency.append(freq)
             filename.append(ff)
             word.append(f)
-            # print(a_)
-            # print(tokens)
-            # print(list(getAllindex(tokens,search)))
-            # print(tokens.index(str(search)))
-            for i in (list(getAllindex(tokens,search))):
-                if(i>=1 and len(tokens)>1):
-                    # print(tokens[i-1:i+2])
-                    ovrvw.append(tokens[i-1:i+2])
-                
-                else:
-                    pass
+            for j in searches:
+                for i in (list(getAllindex(tokens,j))):
+                    if(i>=1 and len(tokens)>1):
+                        # print(tokens[i-1:i+2])
+                        ovrvw.append(tokens[i-1:i+3])
+                    elif(i>=2):
+                        ovrvw.append(tokens[i-3:i+3])
+                    elif(i>=3):
+                        ovrvw.append(tokens[i-3:i+3])
+                    
+                    else:
+                        ovrvw.append(tokens[i:i+3])
             
             temps=ovrvw
 
             ovrvw=[]
             ovrview.append((str(temps)))
-            print(frequency)
+
             
+            for i in pattern:
+                if(i in a_):
+                    rep+=1
+                    print(rep)
+                if(i in a_ and rep<=2):
+                    dt.append(str(i[1:]))
+                    delta.append(int(str(datetime.today())[:-22])-(int(str(i)[-4:])))
+                    k=True
+                if(rep>=3):
+                    dt.pop(-1)
+                    delta.pop(-1)
+                    dt.append("Multiple Dates Detected")
+                    delta.append("Cannot be Determined")
+                    k=True
+                    break
+            rep=1
+                    
+                
+
+            if(k):
+                k=False
+            else:
+                dt.append("Not Found")
+                delta.append("Cannot be Determined")
+                k=False
+
             
-                # print(tokens[(tokens.index(str(search))-1):(tokens.index(str(search))+2)])
 
 
-
-print(ovrview)
-
-df = pd.DataFrame({"Filename":filename,"Word Frequency":frequency,"Word":word,"Short Overview":ovrview})
-# print(df)
+df = pd.DataFrame({"Filename":filename,"Word Frequency":frequency,"Word":word,"Date[MM/YYYY]":dt,"Years since Published":delta,"Short Nearby Words Overview":ovrview})
         
 datetime_details=str(datetime.today())[-26:-16]+" "+str(datetime.today())[-16:-13]+"."+str(datetime.today())[-12:-10]+"."+str(datetime.today())[-9:]
     
 name='Report _Automated '+datetime_details+".csv"
-# df = pd.DataFrame(rows,columns)
 df.to_csv(name)
 root=Tk()
 root.title("Success")
@@ -174,10 +289,7 @@ success_label=Label(text="Spreadsheet File Saved at : "+path+name)
 success_label.pack()
 buttn=Button(text="Done",command=killroot)
 buttn.pack()
-# input("Spreadsheet File Saved at : "+path+name)
-root.mainloop()
-#     except:
-#         input("Check if the Directory is correct or not, if it is : then neccessary libraries not installed")
 
-# except:
-#     input("Neccessary modules are not installed")
+root.mainloop()
+
+
