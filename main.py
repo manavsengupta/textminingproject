@@ -23,18 +23,20 @@ dt=[]
 pattern=[]
 delta=[]
 rep=1
-for i in range(13):
+for i in range(12+1):
     year=2000
     for j in range(22):
         if(i<10):
 
             pattern.append("/"+"0"+str(i)+"/"+str(year))
+            pattern.append("-"+"0"+str(i)+"-"+str(year))
+
         else:
-            pattern.append("/"+"0"+str(i)+"/"+str(year))
+            pattern.append("/"+str(i)+"/"+str(year))
+            pattern.append("-"+str(i)+"-"+str(year))
         year=2000
         year+=j
 k=False
-
 
 
 
@@ -183,7 +185,7 @@ try:
     n.close()
     killroot()
 except:
-    #If nltk punkt is not downloaded then in cmd or terminal type nltk.download('punkt')
+    #If nltk punkt is not downloaded then in cmd or terminal type and enter python and type nltk.download('punkt') and press enter.
     label_for_directory=Label(text="Enter your folder Directory [One Time Only] (Example : C:\\Users\\User\\Desktop' ) : ")
     label_for_directory.pack()
     directory_entry=Entry(root)
@@ -301,7 +303,6 @@ for ff in files:
             for j in searches:
                 for i in (list(getAllindex(tokens,j))):
                     if(i>=1 and len(tokens)>1):
-                        # print(tokens[i-1:i+2])
                         ovrvw.append(tokens[i-1:i+3])
                     elif(i>=2):
                         ovrvw.append(tokens[i-3:i+3])
