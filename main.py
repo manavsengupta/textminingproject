@@ -1,4 +1,4 @@
-print("\n\nMake Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdfminer\n\n .....Loading.......")
+print("\n\nNote: Make Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdfminer and if nltk is not installed before then enter python in cmd or terminal and then enter import nltk and then enter nltk.download('punkt')\n\n .....Loading.......")
 import os
 import pandas as pd
 import nltk
