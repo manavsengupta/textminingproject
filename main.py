@@ -39,7 +39,7 @@ k=False
 
 
 
-
+# This Function is provided by : "Zoum Datascience"   Video link : https://youtu.be/1TDS6-hYPDI ; Github link : https://github.com/zoumdatascience/Natural-Language-Processing/blob/master/getPDFContent.ipynb
 def pdftotexts(filename):
     path_to_pdf=filename
     # Load your PDF
