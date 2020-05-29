@@ -109,7 +109,7 @@ def pdftotexts(filename):
     out_text.close()
 
 
-    with open(str(filename)[:-4]+"_text.txt", 'w') as f:
+    with open(str(filename)[:-4]+"_text_generatedbymain.py.txt", 'w') as f:
             f.write(text)
             f.close()
         
