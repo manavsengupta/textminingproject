@@ -1,10 +1,16 @@
+print("\n\nMake Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdfminer\n\n .....Loading.......")
 import os
 import pandas as pd
 import nltk
 from datetime import datetime
 from nltk.tokenize import word_tokenize
 from tkinter import *
-import pdftotext
+
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.layout import LAParams
+from pdfminer.converter import TextConverter
+from io import StringIO
+from pdfminer.pdfpage import PDFPage
 files = []
 filename=[]
 word=[]
@@ -35,17 +41,82 @@ k=False
 
 
 def pdftotexts(filename):
- 
+    path_to_pdf=filename
     # Load your PDF
-    with open(filename, "rb") as f:
-        pdf = pdftotext.PDF(f)
-        f.close()
-        
     
-    # Save all text to a txt file.
+
+    '''
+    path_to_pdf: is the parameter that will give access to the PDF File 
+    we want to extract the content.
+    '''
+    
+    '''
+    PDFResourceManager is used to store shared resources such as fonts or images that 
+    we might encounter in the files. 
+    '''
+    
+    resource_manager = PDFResourceManager(caching=True)
+    
+    '''
+    create a string object that will contain the final text the representation of the pdf. 
+    '''
+    out_text = StringIO()
+    
+    '''
+    UTF-8 is one of the most commonly used encodings, and Python often defaults to using it.
+    In our case, we are going to specify in order to avoid some encoding errors.
+    '''
+    codec = 'utf-8'
+    
+    """
+    LAParams is the object containing the Layout parameters with a certain default value. 
+    """
+    laParams = LAParams()
+    
+    '''
+    Create a TextConverter Object, taking :
+    - ressource_manager,
+    - out_text 
+    - layout parameters.
+    '''
+    text_converter = TextConverter(resource_manager, out_text, laparams=laParams)
+    fp = open(path_to_pdf, 'rb')
+    
+    '''
+    Create a PDF interpreter object taking: 
+    - ressource_manager 
+    - text_converter
+    '''
+    interpreter = PDFPageInterpreter(resource_manager, text_converter)
+
+    '''
+    We are going to process the content of each page of the original PDF File
+    '''
+    for page in PDFPage.get_pages(fp, pagenos=set(), maxpages=0, password="", caching=True, check_extractable=True):
+        interpreter.process_page(page)
+
+    '''
+    Retrieve the entire contents of the “file” at any time 
+    before the StringIO object’s close() method is called.
+    '''
+    text = out_text.getvalue()
+
+    '''
+    Closing all the ressources we previously opened
+    '''
+    fp.close()
+    text_converter.close()
+    out_text.close()
+
+
     with open(str(filename)[:-4]+"_text.txt", 'w') as f:
-        f.write("\n\n".join(pdf))
-        f.close()
+            f.write(text)
+            f.close()
+        
+        # Save all text to a txt file.
+        # with open(str(filename)[:-4]+"_text.txt", 'w') as f:
+        #     f.write("\n\n".join(pdf))
+        #     f.close()
 
 
 
@@ -55,8 +126,8 @@ def getAllindex(list, num):
 
 
 def killroot():
-	global root
-	root.destroy()
+    global root
+    root.destroy()
 
 def savesearch():
     global searchh_entry,search,searches,temp
@@ -101,7 +172,6 @@ def all_casings(input_string):
 
 
 
-print("\n\nMake Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdftotext\n\n")
 
 
 
@@ -113,13 +183,13 @@ try:
     n.close()
     killroot()
 except:
-	#If nltk punkt is not downloaded then in cmd or terminal type nltk.download('punkt')
-	label_for_directory=Label(text="Enter your folder Directory [One Time Only] (Example : C:\\Users\\User\\Desktop' ) : ")
-	label_for_directory.pack()
-	directory_entry=Entry(root)
-	directory_entry.pack()
-	butn=Button(text="Lets Go!",command=savefilepath)
-	butn.pack()
+    #If nltk punkt is not downloaded then in cmd or terminal type nltk.download('punkt')
+    label_for_directory=Label(text="Enter your folder Directory [One Time Only] (Example : C:\\Users\\User\\Desktop' ) : ")
+    label_for_directory.pack()
+    directory_entry=Entry(root)
+    directory_entry.pack()
+    butn=Button(text="Lets Go!",command=savefilepath)
+    butn.pack()
     
     
     
@@ -212,7 +282,7 @@ for ff in files:
                     break
             rep=1
 
-             
+            
 
             if(k):
                 k=False
@@ -291,5 +361,3 @@ buttn=Button(text="Done",command=killroot)
 buttn.pack()
 
 root.mainloop()
-
-
