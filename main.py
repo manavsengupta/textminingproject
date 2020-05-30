@@ -356,7 +356,7 @@ df.to_csv(name)
 root=Tk()
 root.title("Success")
 
-success_label=Label(text="Spreadsheet File Saved at : "+path+name)
+success_label=Label(text="Spreadsheet File Saved : "+name)
 success_label.pack()
 buttn=Button(text="Done",command=killroot)
 buttn.pack()
