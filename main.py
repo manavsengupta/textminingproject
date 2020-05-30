@@ -1,4 +1,4 @@
-print("\n\nNote: Make Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdfminer and if nltk is not installed before then enter python in cmd or terminal and then enter import nltk and then enter nltk.download('punkt')\n\n .....Loading.......")
+print("\n\nNote: Make Sure all the libraries are installed if not in cmd or Terminal write : pip install nltk pandas pdfminer and if nltk is not installed before then enter python in cmd or terminal and then enter import nltk and then enter nltk.download('punkt').This Program is compatible with latest Python Version yet 3.8 .If in future the Program is not supported by latest python version or libraries consider using the virtualenv in my github repo for the Project : https://www.github.com/manavsengupta/textminingproj/ or installing the necessary libraries by the requirements.txt provided in the same github repo by running the command pip install -r requirements.txt\n\n .....Loading.......")
 import os
 import pandas as pd
 import nltk
