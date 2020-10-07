@@ -4,8 +4,7 @@ Read all contents off all the .txt and .pdf files in a specified folder and get 
 For Getting Started in Terminal or cmd/PowerShell write pip install -r requirements.txt with the  present working directory  of where the requirements.txt file is present and then it should be all ready to Rock!
 
 
-
-Make Sure for the first time you do import nltk and then nltk.download("punkt") in your python interpreter.
+If you are in linux and tkinter is not installed run `sudo apt install python3-tk`
 
 
 All the other details are present in the Welcome message of main.py.
