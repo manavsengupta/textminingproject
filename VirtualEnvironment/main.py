@@ -1,7 +1,8 @@
-print("\n\nNote: You are running Virtualenv Python Script make sure you activate the virtualenv by ./bin/activate.bat in Windows or source bin/activate in Linux \n\n .....Loading.......")
+print("\n\nNote: You are running Virtualenv Python Script make sure you activate the virtualenv by ./bin/activate.bat in Windows or source bin/activate in Linux and if you are in linux and tkinter is not installed then run sudo apt install python3-tk\n\n .....Loading.......")
 import os
 import pandas as pd
 import nltk
+nltk.download("punkt")
 from datetime import datetime
 from nltk.tokenize import word_tokenize
 from tkinter import *
